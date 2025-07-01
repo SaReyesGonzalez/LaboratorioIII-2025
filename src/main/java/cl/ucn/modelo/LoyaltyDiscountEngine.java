@@ -6,7 +6,8 @@ import java.time.temporal.ChronoUnit;
 
 /**
  * Servicio de lógica de negocios que permite calcular descuentos para clientes
- * según su nivel de lealtad, antigüedad, número de órdenes y si poseen promociones activas.
+ * según su nivel de lealtad, antigüedad, número de órdenes y si poseen
+ * promociones activas.
  * Además, registra los descuentos aplicados en un log persistente.
  */
 public class LoyaltyDiscountEngine {
@@ -32,7 +33,8 @@ public class LoyaltyDiscountEngine {
      *
      * @param customer cliente sobre el cual se aplicará el cálculo.
      * @return porcentaje de descuento como número entre 0.0 y 1.0.
-     * @throws IllegalArgumentException si el cliente es nulo o sus datos son inválidos.
+     * @throws IllegalArgumentException si el cliente es nulo o sus datos son
+     *                                  inválidos.
      */
     public double computeDiscount(Customer customer) {
         if (customer == null || customer.getId() == null || customer.getJoinDate() == null) {
@@ -49,12 +51,16 @@ public class LoyaltyDiscountEngine {
             default -> 0;
         };
 
-        if (years > 5) base += 0.05;
-        if (customer.getTotalOrders() > 100) base += 0.05;
-        if (customer.isHasActivePromo()) base += 0.10;
+        if (years > 5)
+            base += 0.05;
+        if (customer.getTotalOrders() > 100)
+            base += 0.05;
+        if (customer.isHasActivePromo())
+            base += 0.10;
 
         // Tope máximo del 30%
-        if (base > 0.30) base = 0.30;
+        if (base > 0.30)
+            base = 0.30;
 
         logDiscount(customer.getId(), base);
         return base;
@@ -92,7 +98,7 @@ public class LoyaltyDiscountEngine {
      */
     public long countLogsForCustomer(String customerId) {
         return em.createQuery(
-                        "SELECT COUNT(l) FROM DiscountLog l WHERE l.customerId = :cid", Long.class)
+                "SELECT COUNT(l) FROM DiscountLog l WHERE l.customerId = :cid", Long.class)
                 .setParameter("cid", customerId)
                 .getSingleResult();
     }
